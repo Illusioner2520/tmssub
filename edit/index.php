@@ -26,6 +26,7 @@ include("../head.php");
     </div>
 
     <div class="list">
+        <div class="nothings-here">No staff members have been added yet.</div>
         <?php
         // Get availability
         $sql = "SELECT staff_id, weekday, start_time, end_time FROM availability";
@@ -54,6 +55,7 @@ include("../head.php");
                 echo '<div class="list-title">' . $name . '</div>';
                 echo '</div>';
                 echo '<button class="list-action edit-action" data-availability=\'' . json_encode($staffAvailability[$row['id']] ?? []) . '\' data-staff-id="' . $row['id'] . '" data-first-name="' . $row['first_name'] . '" data-last-name="' . $row['last_name'] . '">Edit</button>';
+                echo '<button style="margin-left:0;align-self:stretch;border-radius:8px;padding-inline:19px;" class="list-action trash delete-action" data-staff-id=' . $row['id'] . ' data-first-name="' . $row['first_name'] . '" data-last-name="' . $row['last_name'] . '"><i class="fa-solid fa-trash-can"></i></button>';
                 echo '</div>';
             }
         }

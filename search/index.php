@@ -33,6 +33,7 @@ include("../head.php");
         echo '</div>';
 
         echo '<div class="list">';
+        echo '<div class="nothings-here">No results found.</div>';
 
         // Prevent SQL Injection just in case
         $weekday = mysqli_real_escape_string($db, $_POST['day']);

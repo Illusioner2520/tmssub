@@ -1,3 +1,4 @@
+// Function to easily show a custom dialog element
 function showDialog(title, content, buttons, onsubmit) {
     let dialog = document.createElement("dialog");
     dialog.className = "dialog";
@@ -61,6 +62,7 @@ function showDialog(title, content, buttons, onsubmit) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const url = new URL(window.location);
+    // Clean up the url and remove info when refreshed
     if (url.searchParams.has('message')) {
         url.searchParams.delete('message');
         window.history.replaceState({}, '', url);
@@ -77,6 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
         url.searchParams.delete('last');
         window.history.replaceState({}, '', url);
     }
+
+    // Add actions for buttons on the search results pages
     const searchButtons = document.querySelectorAll('.search-action');
     searchButtons.forEach(button => {
         button.onclick = () => {
@@ -89,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dialogContent.style.fontFamily = "Arial, Helvetica, sans-serif";
             dialogContent.style.maxWidth = "400px";
             dialogContent.innerHTML = `Are you sure you want to select ${firstName} ${lastName} to sub on ${weekday} at ${time}?`;
+            // Open confirmation dialog
             showDialog(`Select ${firstName} ${lastName} to Sub`, dialogContent, [{
                 "type": "cancel",
                 "content": "Cancel"
@@ -120,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+    // Add actions for undo buttons
     const logButtons = document.querySelectorAll('.log-action, .undo');
     logButtons.forEach(button => {
         button.onclick = () => {
@@ -129,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dialogContent.style.fontFamily = "Arial, Helvetica, sans-serif";
             dialogContent.style.maxWidth = "400px";
             dialogContent.innerHTML = `Are you sure you want to undo selecting ${firstName} ${lastName} to sub?`;
+            // show confirmation dialog
             showDialog(`Undo Selection`, dialogContent, [{
                 "type": "cancel",
                 "content": "Cancel"
@@ -157,17 +164,66 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
+    // Add actions for edit buttons on the edit page
     const editButtons = document.querySelectorAll('.edit-action');
     editButtons.forEach(button => {
         button.onclick = () => {
+            // Show the staff dialog
             const firstName = button.dataset.firstName;
             const lastName = button.dataset.lastName;
             const availability = JSON.parse(button.dataset.availability);
             showStaffDialog(firstName, lastName, availability, button.dataset.staffId);
         }
-    })
+    });
+
+    // Add actions for delete buttons on the edit page
+    const deleteButtons = document.querySelectorAll('.delete-action');
+    deleteButtons.forEach(button => {
+        let dialogContent = document.createElement("div");
+        dialogContent.style.fontFamily = "Arial, Helvetica, sans-serif";
+        dialogContent.style.maxWidth = "400px";
+        let fname = button.dataset.firstName;
+        let lname = button.dataset.lastName;
+        dialogContent.innerHTML = `Are you sure you want to delete ${fname} ${lname}?`;
+        let staff_id = button.dataset.staffId;
+        button.onclick = () => {
+            // Show confirmation dialog
+            showDialog("Are you sure?", dialogContent, [
+                {
+                    "type": "cancel",
+                    "content": "Cancel"
+                },
+                {
+                    "type": "confirm",
+                    "content": "Confirm"
+                }
+            ], (confirmButton) => {
+                confirmButton.innerHTML = '<i class="spinner"></i>'
+
+                const formData = new FormData();
+                formData.append('staff_id', staff_id);
+
+                // Submit it to the form
+                fetch('/edit/delete_staff.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.ok ? response.text() : Promise.reject('Failed'))
+                    .then(() => {
+                        // If success, redirect
+                        window.location.href = `/edit/?message=Successfully deleted ${fname} ${lname}`;
+                    })
+                    .catch(() => {
+                        // If error, alert the user
+                        alert("Unable to process request.");
+                    });
+            })
+        }
+    });
 });
 
+// Simple reusable class for text inputs in dialogs
 class DialogTextInput {
     constructor(name, value, id) {
         this.name = name;
@@ -198,6 +254,8 @@ class DialogTextInput {
     }
 }
 
+// Class for editing the availability
+// Use .value to get an array of the available times
 class WeekdayAvailabilityEditor {
     constructor(name, availability_data, weekdayInt) {
         this.name = name;
@@ -234,6 +292,10 @@ class WeekdayAvailabilityEditor {
         dayElement.appendChild(dayTop);
         let timeIntervals = document.createElement("div");
         timeIntervals.className = "time-intervals";
+        let nothingsHere = document.createElement("div");
+        nothingsHere.className = "nothings-here";
+        nothingsHere.innerHTML = "No availability set for this day yet.";
+        timeIntervals.appendChild(nothingsHere);
         this.entries.forEach(entry => {
             timeIntervals.appendChild(entry.element);
         });
@@ -246,6 +308,7 @@ class WeekdayAvailabilityEditor {
     }
 }
 
+// An availability entry with a start and end time, used in a WeekdayAvailabilityEditor
 class AvailabilityEntry {
     constructor(startTime, endTime) {
         let element = document.createElement("div");
@@ -285,15 +348,18 @@ class AvailabilityEntry {
     }
 }
 
+// Show a dialog to edit a staff member's information
 function showStaffDialog(firstName = "", lastName = "", available = [], staff_id = 0) {
     let dialogContent = document.createElement("div");
     dialogContent.className = "dialog-form";
 
+    // text inputs
     let fname = new DialogTextInput("First Name", firstName, "firstname");
     dialogContent.appendChild(fname.getElement());
     let lname = new DialogTextInput("Last Name", lastName, "lastname");
     dialogContent.appendChild(lname.getElement());
 
+    // new editor for each of the weekdays
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
     let editors = [];
     daysOfWeek.forEach((day, i) => {
@@ -322,6 +388,7 @@ function showStaffDialog(firstName = "", lastName = "", available = [], staff_id
         formData.append('first_name', first);
         formData.append('last_name', last);
 
+        // Compile the availability data from all 5 editors
         let availability = [];
         editors.forEach((e, i) => {
             availability = availability.concat(e.value.map(a => ({ "start": a.start, "end": a.end, "weekday": i + 1 })))
@@ -345,10 +412,12 @@ function showStaffDialog(firstName = "", lastName = "", available = [], staff_id
     })
 }
 
+// Add action for the staff add button on edit page
 if (document.getElementById("staff-add")) document.getElementById("staff-add").onclick = () => {
     showStaffDialog();
 }
 
+// Function to create a 30 character string of random letters
 function createId() {
     let string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
     let id = "";

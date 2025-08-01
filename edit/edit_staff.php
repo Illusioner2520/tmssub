@@ -11,6 +11,9 @@ $first_name = mysqli_real_escape_string($db, $_POST['first_name']);
 $last_name = mysqli_real_escape_string($db, $_POST['last_name']);
 $availability = json_decode($_POST['availability'], true);
 
+$db->begin_transaction();
+
+// Update or add first and last name and get the correct staff id
 if ($staff_id == 0) {
     $query = "INSERT INTO staff (`first_name`, `last_name`) VALUES ('$first_name', '$last_name')";
     $result = $db->query($query);
@@ -20,11 +23,11 @@ if ($staff_id == 0) {
     $result = $db->query($query);
 }
 
-$db->begin_transaction();
-
 try {
+    // Delete all previous availability info for this user
     $deleteresult = $db->query("DELETE FROM availability WHERE staff_id = '$staff_id'");
 
+    // Loop through the availability array and add the info to the db
     foreach ($availability as $slot) {
         if (!isset($slot["weekday"], $slot["start"], $slot["end"])) {
             throw new Exception("Invalid availability slot");

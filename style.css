@@ -257,6 +257,8 @@ dialog[open]::backdrop {
 
 .dialog-content-wrapper {
     padding: 10px;
+    max-height: 500px;
+    overflow-y: auto;
 }
 
 .list {
@@ -381,6 +383,7 @@ dialog[open]::backdrop {
 }
 
 @media (prefers-reduced-motion) {
+
     *,
     *::before,
     *::after,
@@ -430,11 +433,11 @@ dialog[open]::backdrop {
 }
 
 .undo {
-    background-color: #43e75933;
+    background-color: #222;
     font-size: 1.2rem;
     color: white;
     border-style: solid;
-    border-color: #43e759;
+    border-color: #444;
     border-radius: 4px;
     padding: 8px;
     border-width: 1px;
@@ -450,15 +453,20 @@ dialog[open]::backdrop {
 }
 
 .undo:hover {
-    background-color: #43e759;
-    color: black;
+    background-color: #444;
 }
 
 .undo:active {
     scale: .9;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
     margin: 0;
 }
 
@@ -510,16 +518,28 @@ h1, h2, h3, h4, h5, h6, p {
     text-decoration: none;
     margin-left: auto;
     width: 30px;
-    height: 30px;
+    padding-inline: 16px;
 }
 
 .trash:hover {
     background-color: #e74343;
-    /* color: black; */
 }
 
 .trash:active {
     scale: .9;
+}
+
+.nothings-here {
+    background-color: #222;
+    border-radius: 8px;
+    padding: 8px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.nothings-here:has(+ *) {
+    display: none;
 }
 
 .time-interval {

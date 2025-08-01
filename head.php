@@ -12,6 +12,7 @@
         return $timeObj ? $timeObj->format('g:i A') : $time_str;
     }
 
+    // Easily format a date from Y-m-d H:i:s to M j, Y g:i A
     function formatDate($date_str) {
         $date = DateTime::createFromFormat('Y-m-d H:i:s', $date_str);
         if (!$date) {

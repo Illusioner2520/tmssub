@@ -21,6 +21,7 @@
     ?>
 
     <div class="list">
+        <div class="nothings-here">No staff members have been selected to sub yet.</div>
         <?php
             $query = "SELECT staff.first_name, staff.last_name, log.* FROM log JOIN staff ON log.staff_id = staff.id ORDER BY date DESC";
             $result = $db->query($query);

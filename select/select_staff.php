@@ -10,11 +10,14 @@
     $time = mysqli_real_escape_string($db, $_POST['time']);
     $weekday = mysqli_real_escape_string($db, $_POST['weekday']);
 
+    $db->begin_transaction();
+
     // Find the staff member
     $query1 = "SELECT * FROM staff WHERE `id` = '$staffId'";
     $result = $db->query($query1);
     if (!$result || $result->num_rows === 0) {
         http_response_code(404);
+        $db->rollback();
         exit();
     }
     $user = $result->fetch_assoc();
@@ -27,6 +30,7 @@
 
     if (!$result2) {
         http_response_code(502);
+        $db->rollback();
         exit();
     }
 
@@ -39,7 +43,9 @@
 
     if (!$result3) {
         http_response_code(502);
+        $db->rollback();
         exit();
     }
 
+    $db->commit();
 ?>
