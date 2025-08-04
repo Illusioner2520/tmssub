@@ -4,6 +4,14 @@
 <?php
 $title = "Edit";
 include("../head.php");
+
+session_start();
+
+// Check for auth
+if (!isset($_SESSION['authorized'])) {
+    header("Location: /authorize/?to=/edit");
+    exit();
+}
 ?>
 
 <body>
@@ -12,6 +20,7 @@ include("../head.php");
 
     <div class="extra-options">
         <a class="extra-button" href="/select"><i class="fa-solid fa-arrow-left"></i>Back</a>
+        <a class="extra-button" href="/select?unauthorize=1"><i class="fa-solid fa-arrow-left"></i>Back and Unauthorize</a>
     </div>
 
     <?php
@@ -22,7 +31,7 @@ include("../head.php");
 
     <div class="list-flex-title">
         <h1>Staff</h1>
-        <button class="list-add" id="staff-add"><i class="fa-solid fa-plus"></i></button>
+        <button class="list-add" id="staff-add" aria-label="Add Staff Member"><i class="fa-solid fa-plus"></i></button>
     </div>
 
     <div class="list">
@@ -55,7 +64,7 @@ include("../head.php");
                 echo '<div class="list-title">' . $name . '</div>';
                 echo '</div>';
                 echo '<button class="list-action edit-action" data-availability=\'' . json_encode($staffAvailability[$row['id']] ?? []) . '\' data-staff-id="' . $row['id'] . '" data-first-name="' . $row['first_name'] . '" data-last-name="' . $row['last_name'] . '">Edit</button>';
-                echo '<button style="margin-left:0;align-self:stretch;border-radius:8px;padding-inline:19px;" class="list-action trash delete-action" data-staff-id=' . $row['id'] . ' data-first-name="' . $row['first_name'] . '" data-last-name="' . $row['last_name'] . '"><i class="fa-solid fa-trash-can"></i></button>';
+                echo '<button aria-label="Delete Staff Member" style="margin-left:0;align-self:stretch;border-radius:8px;padding-inline:19px;" class="list-action trash delete-action" data-staff-id=' . $row['id'] . ' data-first-name="' . $row['first_name'] . '" data-last-name="' . $row['last_name'] . '"><i class="fa-solid fa-trash-can"></i></button>';
                 echo '</div>';
             }
         }

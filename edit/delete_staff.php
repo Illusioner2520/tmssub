@@ -1,9 +1,19 @@
 <?php
+session_start();
+
 $db = new mysqli('localhost', 'root', '', 'sub');
 
 // Check for staff id
 if (!isset($_POST['staff_id'])) {
     http_response_code(400);
+    echo "Required Info Not Provided";
+    exit();
+}
+
+// Check for auth
+if (!isset($_SESSION['authorized'])) {
+    http_response_code(403);
+    echo "Not Authorized";
     exit();
 }
 
@@ -19,6 +29,7 @@ try {
 
     if (!$result1) {
         http_response_code(502);
+        echo "Unable to Delete Staff Entry";
         exit();
     }
 
@@ -28,12 +39,14 @@ try {
 
     if (!$result2) {
         http_response_code(502);
+        echo "Unable to Delete Availability Data";
         exit();
     }
     $db->commit();
 } catch (Exception $e) {
     $db->rollback();
     http_response_code(500);
+    echo "Unable to Delete Staff Entry";
 }
 
 ?>

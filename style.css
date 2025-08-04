@@ -7,6 +7,12 @@ body {
     margin: 0;
     min-height: 100%;
     gap: 8px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input[type=text] {
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 html {
@@ -22,7 +28,7 @@ html {
 .time-input,
 .day-input {
     background-color: #222;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: white;
     border-style: solid;
     border-color: #444;
@@ -31,9 +37,17 @@ html {
     border-width: 1px;
 }
 
+.time-input {
+    min-width: 100px;
+}
+
+.day-input {
+    min-width: 50px;
+}
+
 .go-button {
     background-color: #222;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: white;
     border-style: solid;
     border-color: #444;
@@ -42,9 +56,7 @@ html {
     border-width: 1px;
     cursor: pointer;
     transition: background-color .25s, scale .1s;
-    padding-inline: 30px;
     grid-column: span 2;
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 .go-button:hover {
@@ -70,8 +82,6 @@ html {
 }
 
 .title {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     padding-bottom: 1px;
     border-bottom-style: solid;
@@ -83,7 +93,6 @@ html {
 
 .list-flex-title {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
     padding-bottom: 4px;
     border-bottom-style: solid;
     border-color: #444;
@@ -116,7 +125,6 @@ html {
     justify-content: center;
     align-items: center;
     gap: 8px;
-    font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
 }
 
@@ -190,7 +198,6 @@ dialog[open]::backdrop {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-family: Arial;
 }
 
 .dialog-x {
@@ -273,7 +280,6 @@ dialog[open]::backdrop {
     background-color: #222;
     border-radius: 8px;
     padding: 8px;
-    font-family: Arial, Helvetica, sans-serif;
     align-items: center;
     gap: 8px;
 }
@@ -303,7 +309,6 @@ dialog[open]::backdrop {
     border-radius: 8px;
     padding: 8px;
     background-color: #1f87d833;
-    font-family: Arial, Helvetica, sans-serif;
     color: #b0d7f5;
     align-items: center;
     gap: 8px;
@@ -326,7 +331,6 @@ dialog[open]::backdrop {
     justify-content: center;
     align-items: center;
     gap: 8px;
-    font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
     margin-left: auto;
 }
@@ -359,6 +363,7 @@ dialog[open]::backdrop {
     border-width: 1px;
     border-style: solid;
     border-color: #444;
+    text-decoration: none;
 }
 
 .dialog-button:first-child {
@@ -424,7 +429,6 @@ dialog[open]::backdrop {
     border-radius: 8px;
     padding: 8px;
     background-color: #43e75933;
-    font-family: Arial, Helvetica, sans-serif;
     color: #89e994;
     align-items: center;
     gap: 8px;
@@ -447,7 +451,6 @@ dialog[open]::backdrop {
     justify-content: center;
     align-items: center;
     gap: 8px;
-    font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
     margin-left: auto;
 }
@@ -485,7 +488,6 @@ p {
 .dialog-label {
     font-weight: bold;
     font-size: 1.2rem;
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 .dialog-text-input {
@@ -514,7 +516,6 @@ p {
     justify-content: center;
     align-items: center;
     gap: 8px;
-    font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
     margin-left: auto;
     width: 30px;
@@ -533,7 +534,6 @@ p {
     background-color: #222;
     border-radius: 8px;
     padding: 8px;
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 1.1rem;
     text-align: center;
 }
@@ -568,6 +568,32 @@ p {
     gap: 4px;
 }
 
-input {
-    min-width: 0;
+.toast {
+    inset: unset;
+    background-color: #e7434333;
+    font-size: 1rem;
+    color: white;
+    border-style: solid;
+    border-color: #e74343;
+    border-radius: 8px;
+    padding: 8px;
+    border-width: 1px;
+    transition-property: overlay display transform;
+    transition-duration: .25s;
+    transition-behavior: allow-discrete;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    display: none;
+    transform: translateX(calc(100% + 10px));
+    backdrop-filter: blur(10px);
+}
+
+.toast:popover-open {
+    transform: translateX(0);
+    display: block;
+
+    @starting-style {
+        transform: translateX(calc(100% + 10px));
+    }
 }

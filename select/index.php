@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-    
-<?php include("../head.php") ?>
+
+<?php
+$title = "Search";
+include("../head.php");
+
+session_start();
+
+?>
 
 <body>
 
@@ -12,6 +18,11 @@
             echo '<div class="success">' . $_GET['message'] . '<button class="undo" data-log-id="' . $_GET['log_id'] . '" data-first-name="' . $_GET['first'] . '" data-last-name="' . $_GET['last'] . '">Undo</button></div>';
         } else if (isset($_GET['message'])) {
             echo '<div class="success">' . $_GET['message'] . '</div>';
+        }
+
+        if (isset($_GET['unauthorize'])) {
+            unset($_SESSION['authorized']);
+            echo '<div class="success">Successfully Unauthorized</div>';
         }
     ?>
 

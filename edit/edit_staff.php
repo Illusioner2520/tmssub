@@ -1,8 +1,18 @@
 <?php
+session_start();
+
 $db = new mysqli('localhost', 'root', '', 'sub');
 
 if (!isset($_POST['staff_id']) || !isset($_POST['first_name']) || !isset($_POST['last_name']) || !isset($_POST['availability'])) {
     http_response_code(400);
+    echo "Required Info Not Provided";
+    exit();
+}
+
+// Check for auth
+if (!isset($_SESSION['authorized'])) {
+    http_response_code(403);
+    echo "Not Authorized";
     exit();
 }
 
@@ -44,6 +54,7 @@ try {
 } catch (Exception $e) {
     $db->rollback();
     http_response_code(500);
+    echo "Internal Server Error";
 }
 
 ?>

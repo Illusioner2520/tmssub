@@ -11,7 +11,7 @@ include("../head.php");
     <h1 class="title">Search Results</h1>
 
     <div class="extra-options">
-        <a class="extra-button" href="<?php echo "/select" ?>"><i class="fa-solid fa-arrow-left"></i>Back</a>
+        <a class="extra-button" href="/select"><i class="fa-solid fa-arrow-left"></i>Back</a>
     </div>
 
     <?php

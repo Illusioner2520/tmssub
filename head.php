@@ -42,4 +42,19 @@
     <link rel="stylesheet" href="/style.css">
     <script src="/script.js" defer></script>
     <script src="https://kit.fontawesome.com/833cdaff8a.js" crossorigin="anonymous"></script>
+    <?php if (isset($title) && $title == "Authorize") : ?>
+        <script src="/authorize/script.js" defer></script>
+    <?php endif ?>
+    <?php if (isset($title) && $title == "Edit") : ?>
+        <script src="/edit/script.js" defer></script>
+    <?php endif ?>
+    <?php if (isset($title) && $title == "Log") : ?>
+        <script src="/log/script.js" defer></script>
+    <?php endif ?>
+    <?php if (isset($title) && $title == "Search Results") : ?>
+        <script src="/search/script.js" defer></script>
+    <?php endif ?>
+    <?php if (isset($title) && $title == "Search") : ?>
+        <script src="/log/script.js" defer></script>
+    <?php endif ?>
 </head>
